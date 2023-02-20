@@ -1,31 +1,37 @@
 import sys
 
 sys.path.append('../loader')
-from unaligned_data_loader import UnalignedDataLoader
-from svhn import load_svhn
-from mnist import load_mnist
-from usps import load_usps
-from gtsrb import load_gtsrb
-from synth_traffic import load_syntraffic
+#from unaligned_data_loader import UnalignedDataLoader
+#from svhn import load_svhn
+#from mnist import load_mnist
+#from usps import load_usps
+#from gtsrb import load_gtsrb
+#from synth_traffic import load_syntraffic
 
+from datasets import unaligned_data_loader
+from datasets import svhn
+from datasets import mnist
+from datasets import usps
+from datasets import gtsrb
+from datasets import synth_traffic
 
 def return_dataset(data, scale=False, usps=False, all_use='no'):
     if data == 'svhn':
         train_image, train_label, \
-        test_image, test_label = load_svhn()
+        test_image, test_label = svhn.load_svhn()
     if data == 'mnist':
         train_image, train_label, \
-        test_image, test_label = load_mnist(scale=scale, usps=usps, all_use=all_use)
+        test_image, test_label = mnist.load_mnist(scale=scale, usps=usps, all_use=all_use)
         print(train_image.shape)
     if data == 'usps':
         train_image, train_label, \
-        test_image, test_label = load_usps(all_use=all_use)
+        test_image, test_label = usps.load_usps(all_use=all_use)
     if data == 'synth':
         train_image, train_label, \
-        test_image, test_label = load_syntraffic()
+        test_image, test_label = synth_traffic.load_syntraffic()
     if data == 'gtsrb':
         train_image, train_label, \
-        test_image, test_label = load_gtsrb()
+        test_image, test_label = gtsrb.load_gtsrb()
 
     return train_image, train_label, test_image, test_label
 
@@ -56,10 +62,10 @@ def dataset_read(source, target, batch_size, scale=False, all_use='no'):
     T_test['imgs'] = test_target
     T_test['labels'] = t_label_test
     scale = 40 if source == 'synth' else 28 if source == 'usps' or target == 'usps' else 32
-    train_loader = UnalignedDataLoader()
+    train_loader = unaligned_data_loader.UnalignedDataLoader()
     train_loader.initialize(S, T, batch_size, batch_size, scale=scale)
     dataset = train_loader.load_data()
-    test_loader = UnalignedDataLoader()
+    test_loader = unaligned_data_loader.UnalignedDataLoader()
     test_loader.initialize(S_test, T_test, batch_size, batch_size, scale=scale)
     dataset_test = test_loader.load_data()
     return dataset, dataset_test

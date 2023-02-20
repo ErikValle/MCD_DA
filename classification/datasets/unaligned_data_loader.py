@@ -2,7 +2,8 @@ import torch.utils.data
 import torchnet as tnt
 from builtins import object
 import torchvision.transforms as transforms
-from datasets import Dataset
+#from datasets import Dataset
+from datasets import datasets
 
 
 class PairedData(object):
@@ -53,12 +54,12 @@ class PairedData(object):
 class UnalignedDataLoader():
     def initialize(self, source, target, batch_size1, batch_size2, scale=32):
         transform = transforms.Compose([
-            transforms.Scale(scale),
+            transforms.Resize(scale),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
-        dataset_source = Dataset(source['imgs'], source['labels'], transform=transform)
-        dataset_target = Dataset(target['imgs'], target['labels'], transform=transform)
+        dataset_source = datasets.Dataset(source['imgs'], source['labels'], transform=transform)
+        dataset_target = datasets.Dataset(target['imgs'], target['labels'], transform=transform)
         # dataset_source = tnt.dataset.TensorDataset([source['imgs'], source['labels']])
         # dataset_target = tnt.dataset.TensorDataset([target['imgs'], target['labels']])
         data_loader_s = torch.utils.data.DataLoader(

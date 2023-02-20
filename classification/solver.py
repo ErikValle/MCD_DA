@@ -133,8 +133,9 @@ class Solver(object):
             self.opt_c1.step()
             self.opt_c2.step()
             self.reset_grad()
-
-            for i in xrange(self.num_k):
+            
+            #for i in xrange(self.num_k):
+            for i in range(self.num_k):
                 #
                 feat_t = self.G(img_t)
                 output_t1 = self.C1(feat_t)
@@ -149,10 +150,10 @@ class Solver(object):
             if batch_idx % self.interval == 0:
                 print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss1: {:.6f}\t Loss2: {:.6f}\t  Discrepancy: {:.6f}'.format(
                     epoch, batch_idx, 100,
-                    100. * batch_idx / 70000, loss_s1.data[0], loss_s2.data[0], loss_dis.data[0]))
+                    100. * batch_idx / 70000, loss_s1.data, loss_s2.data, loss_dis.data))
                 if record_file:
                     record = open(record_file, 'a')
-                    record.write('%s %s %s\n' % (loss_dis.data[0], loss_s1.data[0], loss_s2.data[0]))
+                    record.write('%s %s %s\n' % (loss_dis.data, loss_s1.data, loss_s2.data))
                     record.close()
         return batch_idx
 
